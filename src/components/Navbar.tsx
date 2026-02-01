@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Code2, Github, Linkedin, Menu, MessageCircle, X } from "lucide-react";
+import Image from "next/image";
+import { Github, Linkedin, Menu, MessageCircle, X } from "lucide-react";
 import { site } from "@/data/site";
 import { cn } from "@/lib/utils";
 import { scrollToId } from "@/components/scroll";
@@ -40,13 +41,24 @@ export default function Navbar() {
     };
   }, []);
 
-  // Bloquea / libera scroll del body cuando abre/cierra el drawer
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
+// Bloquea / libera scroll cuando abre/cierra el drawer (sin “estados zombie”)
+useEffect(() => {
+  const html = document.documentElement;
+  const body = document.body;
+
+  const prevHtmlOverflow = html.style.overflow;
+  const prevBodyOverflow = body.style.overflow;
+
+  if (open) {
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+  }
+
+  return () => {
+    html.style.overflow = prevHtmlOverflow;
+    body.style.overflow = prevBodyOverflow;
+  };
+}, [open]);
 
   // Cierra drawer al pasar a desktop
   useEffect(() => {
@@ -74,18 +86,42 @@ export default function Navbar() {
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         {/* Brand */}
-        <button onClick={() => navTo("inicio")} className="flex items-center gap-2 text-left">
-          <span className="grid h-10 w-10 place-items-center rounded-xl bg-white/10">
-            <Code2 className="h-5 w-5" />
-          </span>
-          <div className="leading-tight">
-            <div className="font-semibold">{site.brand}</div>
-            <div className="hidden text-xs text-zinc-400 sm:block">{site.tagline}</div>
-          </div>
-        </button>
+<button onClick={() => navTo("inicio")} className="flex items-center gap-3 text-left">
+  {/* Logo container */}
+  <span className="relative grid h-10 w-10 place-items-center rounded-2xl bg-white/5 ring-1 ring-white/10">
+    {/* Light mode */}
+    <Image
+      src={site.logo.markDark}
+      alt={site.logo.alt}
+      fill
+      sizes="40px"
+      className="object-contain p-[6px] dark:hidden"
+      priority
+    />
+    {/* Dark mode */}
+    <Image
+      src={site.logo.markLight}
+      alt={site.logo.alt}
+      fill
+      sizes="40px"
+      className="hidden object-contain p-[6px] dark:block"
+      priority
+    />
+  </span>
+
+  <div className="flex flex-col justify-center leading-none">
+  <div className="text-[14px] sm:text-[24px] font-semibold uppercase tracking-[0.20em] text-white leading-none">
+    {site.brand}
+  </div>
+  <div className="hidden lg:block text-[11px] font-medium tracking-wide text-zinc-400 leading-none mt-1">
+    {site.tagline}
+  </div>
+</div>
+</button>
+
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden items-center gap-6 lg:flex">
           {nav.map((n) => (
             <button
               key={n.id}
@@ -157,11 +193,35 @@ export default function Navbar() {
       {/* Mobile Drawer (OPACO) */}
       {open && (
         <div className="fixed inset-0 z-[60] md:hidden">
-          <div className="absolute inset-0 bg-black/85" onClick={() => setOpen(false)} />
+          <div className="absolute inset-0 bg-black/92" onClick={() => setOpen(false)} />
 
-          <div className="absolute right-0 top-0 h-full w-[88%] max-w-sm bg-zinc-950 shadow-2xl">
+          <div className="absolute right-0 top-0 h-full w-[88%] max-w-sm bg-zinc-950 shadow-2xl ring-1 ring-white/10">
             <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
-              <div className="font-semibold">{site.brand}</div>
+              {/* Brand (mobile) */}
+              <button onClick={() => navTo("inicio")} className="flex items-center gap-2 text-left">
+                <span className="relative grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-white/5">
+                  <Image
+                    src={site.logo.markDark}
+                    alt={site.logo.alt}
+                    fill
+                    sizes="40px"
+                    className="object-contain p-[6px] dark:hidden"
+                    priority
+                  />
+                  <Image
+                    src={site.logo.markLight}
+                    alt={site.logo.alt}
+                    fill
+                    sizes="40px"
+                    className="hidden object-contain p-1 dark:block"
+                    priority
+                  />
+                </span>
+                <div className="text-[15px] font-semibold uppercase tracking-[0.18em] text-white sm:text-[16px]">
+  {site.brand}
+</div>
+              </button>
+
               <button
                 className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 hover:bg-white/10"
                 onClick={() => setOpen(false)}

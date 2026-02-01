@@ -1,9 +1,24 @@
 export const site = {
-  brand: "NOMBRE DE TU EMPRESA",
+  brand: "EGT SOLUTIONS",
   tagline: "Desarrollo web • Automatización • Software a medida",
   location: "México",
   email: "contacto@tudominio.com",
   whatsapp: "5210000000000", // 52 + 1 + 10 dígitos (México)
+
+  logo: {
+    alt: "EGT Solutions",
+    // Para fondos claros (modo light)
+    fullDark: "/brand/logo-dark-512.png",
+    markDark: "/brand/mark-dark-256.png",
+
+    // Para fondos oscuros (modo dark)
+    fullLight: "/brand/logo-light-512.png",
+    markLight: "/brand/mark-light-256.png",
+
+    // (opcional)
+    faviconDark: "/brand/favicon-dark-128.png",
+    faviconLight: "/brand/favicon-light-128.png",
+  },
 
   social: {
     github: "https://github.com/tuusuario",

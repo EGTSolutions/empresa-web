@@ -55,10 +55,10 @@ function Stage({ isBg }: { isBg: boolean }) {
           transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
           style={{ transformStyle: "preserve-3d" as any }}
           className={
-            isBg
-              ? "absolute right-[-10%] top-1/2 w-[130%] -translate-y-1/2 [perspective:1200px] sm:right-[-14%] sm:w-[135%] md:right-[-12%] md:w-[120%] lg:right-[-18%] lg:w-[125%]"
-              : "mx-auto w-full [perspective:1200px]"
-          }
+  isBg
+    ? "absolute inset-0 [perspective:1200px]"
+    : "mx-auto w-full [perspective:1200px]"
+}
         >
           <div className={isBg ? "relative mx-auto w-full max-w-[720px]" : "relative mx-auto w-full max-w-[560px]"}>
             <div className="relative [transform:rotateX(12deg)_rotateY(-12deg)]">
