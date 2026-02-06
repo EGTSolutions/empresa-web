@@ -95,20 +95,13 @@ export default function Navbar() {
         {/* Brand */}
         <button onClick={() => navTo("inicio")} className="flex items-center gap-3 text-left">
           <span className="relative grid h-10 w-10 place-items-center rounded-2xl bg-white/5 ring-1 ring-white/10">
+            {/* Siempre logo blanco en tono oscuro */}
             <Image
               src={site.logo.markLight}
               alt={site.logo.alt}
               fill
               sizes="40px"
-              className="object-contain p-[6px] dark:hidden"
-              priority
-            />
-            <Image
-              src={site.logo.markDark}
-              alt={site.logo.alt}
-              fill
-              sizes="40px"
-              className="hidden object-contain p-[6px] dark:block"
+              className="object-contain p-[6px]"
               priority
             />
           </span>
@@ -160,7 +153,7 @@ export default function Navbar() {
               WhatsApp
             </a>
 
-            {/* Facebook (reemplaza GitHub/LinkedIn) */}
+            {/* Facebook */}
             <a
               className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 hover:bg-white/10"
               href={site.social.facebook}
@@ -207,20 +200,13 @@ export default function Navbar() {
             <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
               <button onClick={() => navTo("inicio")} className="flex items-center gap-2 text-left">
                 <span className="relative grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-white/5">
-                  <Image
-                    src={site.logo.markDark}
-                    alt={site.logo.alt}
-                    fill
-                    sizes="40px"
-                    className="object-contain p-[6px] dark:hidden"
-                    priority
-                  />
+                  {/* Siempre logo blanco también en el drawer */}
                   <Image
                     src={site.logo.markLight}
                     alt={site.logo.alt}
                     fill
                     sizes="40px"
-                    className="hidden object-contain p-1 dark:block"
+                    className="object-contain p-[6px]"
                     priority
                   />
                 </span>
@@ -274,7 +260,6 @@ export default function Navbar() {
                   WhatsApp
                 </a>
 
-                {/* Facebook (reemplaza GitHub/LinkedIn) */}
                 <a
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-semibold hover:bg-white/15"
                   href={site.social.facebook}
