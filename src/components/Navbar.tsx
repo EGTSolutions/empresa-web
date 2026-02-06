@@ -160,7 +160,7 @@ export default function Navbar() {
               WhatsApp
             </a>
 
-            {/* ✅ Facebook (reemplaza GitHub/LinkedIn) */}
+            {/* Facebook (reemplaza GitHub/LinkedIn) */}
             <a
               className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 hover:bg-white/10"
               href={site.social.facebook}
@@ -208,7 +208,7 @@ export default function Navbar() {
               <button onClick={() => navTo("inicio")} className="flex items-center gap-2 text-left">
                 <span className="relative grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-white/5">
                   <Image
-                    src={site.logo.markLight}
+                    src={site.logo.markDark}
                     alt={site.logo.alt}
                     fill
                     sizes="40px"
@@ -216,7 +216,7 @@ export default function Navbar() {
                     priority
                   />
                   <Image
-                    src={site.logo.markDark}
+                    src={site.logo.markLight}
                     alt={site.logo.alt}
                     fill
                     sizes="40px"
@@ -274,7 +274,7 @@ export default function Navbar() {
                   WhatsApp
                 </a>
 
-                {/* ✅ Facebook (reemplaza GitHub/LinkedIn) */}
+                {/* Facebook (reemplaza GitHub/LinkedIn) */}
                 <a
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-semibold hover:bg-white/15"
                   href={site.social.facebook}
