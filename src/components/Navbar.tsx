@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Github, Linkedin, Menu, MessageCircle, X } from "lucide-react";
+import { Facebook, Menu, MessageCircle, X } from "lucide-react";
 import { site } from "@/data/site";
 import { cn } from "@/lib/utils";
 import { scrollToId } from "@/components/scroll";
@@ -41,24 +41,28 @@ export default function Navbar() {
     };
   }, []);
 
-// Bloquea / libera scroll cuando abre/cierra el drawer (sin “estados zombie”)
-useEffect(() => {
-  const html = document.documentElement;
-  const body = document.body;
+  // Bloquea / libera scroll cuando abre/cierra el drawer
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
 
-  const prevHtmlOverflow = html.style.overflow;
-  const prevBodyOverflow = body.style.overflow;
+    const prevHtmlOverflow = html.style.overflow;
+    const prevBodyOverflow = body.style.overflow;
 
-  if (open) {
-    html.style.overflow = "hidden";
-    body.style.overflow = "hidden";
-  }
+    if (open) {
+      html.style.overflow = "hidden";
+      body.style.overflow = "hidden";
 
-  return () => {
-    html.style.overflow = prevHtmlOverflow;
-    body.style.overflow = prevBodyOverflow;
-  };
-}, [open]);
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: window.scrollY, behavior: "auto" });
+      });
+    }
+
+    return () => {
+      html.style.overflow = prevHtmlOverflow;
+      body.style.overflow = prevBodyOverflow;
+    };
+  }, [open]);
 
   // Cierra drawer al pasar a desktop
   useEffect(() => {
@@ -70,7 +74,6 @@ useEffect(() => {
   }, []);
 
   const navTo = (id: string) => {
-    // Importantísimo: cierra primero, luego scroll (para que no se quede el body en overflow hidden)
     setOpen(false);
     requestAnimationFrame(() => scrollToId(id));
   };
@@ -78,47 +81,47 @@ useEffect(() => {
   return (
     <header
       ref={headerRef}
+      style={
+        {
+          ["--nav-bg-alpha" as any]: 0.92,
+        } as React.CSSProperties
+      }
       className={cn(
         "sticky top-0 z-50 border-b border-white/10",
-        "bg-zinc-950",
-        "supports-[backdrop-filter]:bg-zinc-950/95 supports-[backdrop-filter]:backdrop-blur"
+        "bg-[rgb(9_9_11/var(--nav-bg-alpha))]"
       )}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         {/* Brand */}
-<button onClick={() => navTo("inicio")} className="flex items-center gap-3 text-left">
-  {/* Logo container */}
-  <span className="relative grid h-10 w-10 place-items-center rounded-2xl bg-white/5 ring-1 ring-white/10">
-    {/* Light mode */}
-    <Image
-      src={site.logo.markDark}
-      alt={site.logo.alt}
-      fill
-      sizes="40px"
-      className="object-contain p-[6px] dark:hidden"
-      priority
-    />
-    {/* Dark mode */}
-    <Image
-      src={site.logo.markLight}
-      alt={site.logo.alt}
-      fill
-      sizes="40px"
-      className="hidden object-contain p-[6px] dark:block"
-      priority
-    />
-  </span>
+        <button onClick={() => navTo("inicio")} className="flex items-center gap-3 text-left">
+          <span className="relative grid h-10 w-10 place-items-center rounded-2xl bg-white/5 ring-1 ring-white/10">
+            <Image
+              src={site.logo.markLight}
+              alt={site.logo.alt}
+              fill
+              sizes="40px"
+              className="object-contain p-[6px] dark:hidden"
+              priority
+            />
+            <Image
+              src={site.logo.markDark}
+              alt={site.logo.alt}
+              fill
+              sizes="40px"
+              className="hidden object-contain p-[6px] dark:block"
+              priority
+            />
+          </span>
 
-  <div className="flex flex-col justify-center leading-none">
-  <div className="text-[14px] sm:text-[24px] font-semibold uppercase tracking-[0.20em] text-white leading-none">
-    {site.brand}
-  </div>
-  <div className="hidden lg:block text-[11px] font-medium tracking-wide text-zinc-400 leading-none mt-1">
-    {site.tagline}
-  </div>
-</div>
-</button>
-
+          <div className="flex flex-col justify-center leading-none">
+            <div className="text-[14px] font-semibold uppercase tracking-[0.20em] text-white leading-none sm:text-[24px]">
+              {site.brand}
+            </div>
+            <div className="hidden lg:block text-[11px] font-medium tracking-wide text-zinc-400 leading-none mt-1">
+              {site.tagline}
+            </div>
+          </div>
+        </button>
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-6 lg:flex">
@@ -135,73 +138,77 @@ useEffect(() => {
 
         {/* Actions */}
         <div className="flex items-center gap-2">
-          {/* WhatsApp desktop */}
-          <a
+          {/* Placa de fondo atrás de los botones (desktop) */}
+          <div
             className={cn(
-              "hidden md:inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm",
-              "bg-white/10 hover:bg-white/15 border border-white/10"
+              "hidden md:flex items-center gap-2 rounded-2xl px-2 py-2",
+              "bg-white/5 ring-1 ring-white/10"
             )}
-            href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent(
-              "Hola, me interesa una cotización. ¿Podemos agendar una llamada?"
-            )}`}
-            target="_blank"
-            rel="noreferrer"
           >
-            <MessageCircle className="h-4 w-4" />
-            WhatsApp
-          </a>
+            <a
+              className={cn(
+                "inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm",
+                "bg-white/10 hover:bg-white/15 border border-white/10"
+              )}
+              href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent(
+                "Hola, me interesa una cotización. ¿Podemos agendar una llamada?"
+              )}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <MessageCircle className="h-4 w-4" />
+              WhatsApp
+            </a>
 
-          {/* Social desktop */}
-          <a
-            className="hidden md:inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 hover:bg-white/10"
-            href={site.social.github}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="GitHub"
-          >
-            <Github className="h-5 w-5" />
-          </a>
-          <a
-            className="hidden md:inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 hover:bg-white/10"
-            href={site.social.linkedin}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="LinkedIn"
-          >
-            <Linkedin className="h-5 w-5" />
-          </a>
+            {/* ✅ Facebook (reemplaza GitHub/LinkedIn) */}
+            <a
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 hover:bg-white/10"
+              href={site.social.facebook}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Facebook"
+            >
+              <Facebook className="h-5 w-5" />
+            </a>
 
-          {/* CTA */}
-          <button
-            className="hidden sm:inline-flex items-center rounded-xl bg-white px-4 py-2 text-sm font-semibold text-black hover:opacity-90"
-            onClick={() => navTo("contacto")}
-          >
-            Cotizar
-          </button>
+            <button
+              className="inline-flex items-center rounded-xl bg-white px-4 py-2 text-sm font-semibold text-black hover:opacity-90"
+              onClick={() => navTo("contacto")}
+            >
+              Cotizar
+            </button>
+          </div>
 
-          {/* Mobile button */}
-          <button
-            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 md:hidden"
-            onClick={() => setOpen(true)}
-            aria-label="Abrir menú"
-          >
-            <Menu className="h-5 w-5" />
-          </button>
+          {/* Mobile button (con su propia placa) */}
+          <div className="md:hidden rounded-2xl bg-white/5 ring-1 ring-white/10 p-1">
+            <button
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/10 hover:bg-white/15"
+              onClick={() => setOpen(true)}
+              aria-label="Abrir menú"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile Drawer (OPACO) */}
+      {/* Mobile Drawer */}
       {open && (
         <div className="fixed inset-0 z-[60] md:hidden">
-          <div className="absolute inset-0 bg-black/92" onClick={() => setOpen(false)} />
+          <div className="absolute inset-0 bg-black/70" onClick={() => setOpen(false)} />
 
-          <div className="absolute right-0 top-0 h-full w-[88%] max-w-sm bg-zinc-950 shadow-2xl ring-1 ring-white/10">
+          <div
+            className={cn(
+              "absolute right-0 top-0 h-[100dvh] w-[88%] max-w-sm",
+              "bg-[rgb(9_9_11/0.98)] shadow-2xl ring-1 ring-white/10",
+              "flex flex-col"
+            )}
+          >
             <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
-              {/* Brand (mobile) */}
               <button onClick={() => navTo("inicio")} className="flex items-center gap-2 text-left">
                 <span className="relative grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-white/5">
                   <Image
-                    src={site.logo.markDark}
+                    src={site.logo.markLight}
                     alt={site.logo.alt}
                     fill
                     sizes="40px"
@@ -209,7 +216,7 @@ useEffect(() => {
                     priority
                   />
                   <Image
-                    src={site.logo.markLight}
+                    src={site.logo.markDark}
                     alt={site.logo.alt}
                     fill
                     sizes="40px"
@@ -218,8 +225,8 @@ useEffect(() => {
                   />
                 </span>
                 <div className="text-[15px] font-semibold uppercase tracking-[0.18em] text-white sm:text-[16px]">
-  {site.brand}
-</div>
+                  {site.brand}
+                </div>
               </button>
 
               <button
@@ -231,17 +238,19 @@ useEffect(() => {
               </button>
             </div>
 
-            <div className="px-4 py-4">
-              <div className="grid gap-2">
-                {nav.map((n) => (
-                  <button
-                    key={n.id}
-                    onClick={() => navTo(n.id)}
-                    className="w-full rounded-xl border border-white/10 bg-zinc-900 px-4 py-3 text-left text-sm font-semibold text-zinc-100 hover:bg-zinc-800"
-                  >
-                    {n.label}
-                  </button>
-                ))}
+            <div className="flex-1 overflow-y-auto px-4 py-4">
+              <div className="rounded-2xl bg-white/5 ring-1 ring-white/10 p-2">
+                <div className="grid gap-2">
+                  {nav.map((n) => (
+                    <button
+                      key={n.id}
+                      onClick={() => navTo(n.id)}
+                      className="w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-left text-sm font-semibold text-zinc-100 hover:bg-white/15"
+                    >
+                      {n.label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div className="mt-6 grid gap-3 border-t border-white/10 pt-4">
@@ -253,7 +262,7 @@ useEffect(() => {
                 </button>
 
                 <a
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-zinc-900 px-4 py-3 text-sm font-semibold hover:bg-zinc-800"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-semibold hover:bg-white/15"
                   href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent(
                     "Hola, me interesa una cotización. ¿Podemos agendar una llamada?"
                   )}`}
@@ -265,27 +274,22 @@ useEffect(() => {
                   WhatsApp
                 </a>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <a
-                    className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-zinc-900 px-4 py-3 text-sm font-semibold hover:bg-zinc-800"
-                    href={site.social.github}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={() => setOpen(false)}
-                  >
-                    GitHub
-                  </a>
-                  <a
-                    className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-zinc-900 px-4 py-3 text-sm font-semibold hover:bg-zinc-800"
-                    href={site.social.linkedin}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={() => setOpen(false)}
-                  >
-                    LinkedIn
-                  </a>
-                </div>
+                {/* ✅ Facebook (reemplaza GitHub/LinkedIn) */}
+                <a
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-semibold hover:bg-white/15"
+                  href={site.social.facebook}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => setOpen(false)}
+                >
+                  <Facebook className="h-4 w-4" />
+                  Facebook
+                </a>
               </div>
+            </div>
+
+            <div className="border-t border-white/10 px-4 py-3 text-xs text-zinc-400">
+              {/* placeholder */}
             </div>
           </div>
         </div>

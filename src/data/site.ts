@@ -2,8 +2,8 @@ export const site = {
   brand: "EGT SOLUTIONS",
   tagline: "Desarrollo web • Automatización • Software a medida",
   location: "México",
-  email: "contacto@tudominio.com",
-  whatsapp: "5210000000000", // 52 + 1 + 10 dígitos (México)
+  email: "egtsolutions.contact@gmail.com",
+  whatsapp: "5578953453", // 52 + 1 + 10 dígitos (México)
 
   logo: {
     alt: "EGT Solutions",
