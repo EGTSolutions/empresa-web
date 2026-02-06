@@ -21,8 +21,7 @@ export const site = {
   },
 
   social: {
-    github: "https://github.com/tuusuario",
-    linkedin: "https://www.linkedin.com/in/tuusuario",
+     facebook: "https://www.facebook.com/TU_PAGINA",
     website: "https://tudominio.com",
   },
 
